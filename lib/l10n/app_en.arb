@@ -1,0 +1,42 @@
+{
+  "@@locale": "en",
+  "appName": "Gravity Flip",
+
+  "tapToPlay": "TAP TO PLAY",
+  "leaderboard": "LEADERBOARD",
+  "back": "BACK",
+
+  "gameOver": "GAME OVER",
+  "newBest": "NEW BEST!",
+  "bestLabel": "BEST",
+  "playAgain": "PLAY AGAIN",
+  "mainMenu": "MAIN MENU",
+
+  "continueQuestion": "CONTINUE?",
+  "tapToContinue": "TAP SCREEN TO CONTINUE",
+  "noThanks": "NO THANKS",
+
+  "submitted": "✓ Submitted to leaderboard",
+  "submissionFailed": "Submission failed",
+
+  "yourName": "YOUR NAME",
+  "enterNameHint": "Player name",
+  "enterNameDescription": "Enter a name to appear on the leaderboard",
+  "nameEmpty": "Enter a name",
+  "nameTooLong": "Max 20 characters",
+  "saveAndSubmit": "SAVE & SUBMIT",
+
+  "noScoresYet": "No scores yet. Be the first!",
+  "failedToLoad": "Failed to load leaderboard",
+
+  "shieldActive": "SHIELD",
+  "doubleScoreActive": "2X",
+  "slowMotionActive": "SLOW",
+
+  "score": "Score",
+  "shield": "Shield",
+  "slowMotion": "Slow Motion",
+  "magnet": "Magnet",
+  "doubleScore": "Double Score",
+  "watchAd": "Watch ad"
+}

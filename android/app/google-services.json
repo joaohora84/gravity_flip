@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "700649204935",
+    "project_id": "gravity-flip-4231e",
+    "storage_bucket": "gravity-flip-4231e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:700649204935:android:7982c83151caa1252ea2e2",
+        "android_client_info": {
+          "package_name": "br.com.synarach.gravity_flip"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKWB1yYfYAAXg7VdJARynQv-ujvQ2_zPo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

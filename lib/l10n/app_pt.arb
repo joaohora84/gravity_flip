@@ -1,0 +1,42 @@
+{
+  "@@locale": "pt",
+  "appName": "Gravity Flip",
+
+  "tapToPlay": "TOQUE PARA JOGAR",
+  "leaderboard": "RANKING",
+  "back": "VOLTAR",
+
+  "gameOver": "FIM DE JOGO",
+  "newBest": "NOVO RECORDE!",
+  "bestLabel": "MELHOR",
+  "playAgain": "JOGAR NOVAMENTE",
+  "mainMenu": "MENU PRINCIPAL",
+
+  "continueQuestion": "CONTINUAR?",
+  "tapToContinue": "TOQUE NA TELA PARA CONTINUAR",
+  "noThanks": "NÃO, OBRIGADO",
+
+  "submitted": "✓ Enviado ao ranking",
+  "submissionFailed": "Falha no envio",
+
+  "yourName": "SEU NOME",
+  "enterNameHint": "Nome do jogador",
+  "enterNameDescription": "Digite um nome para aparecer no ranking",
+  "nameEmpty": "Digite um nome",
+  "nameTooLong": "Máximo 20 caracteres",
+  "saveAndSubmit": "SALVAR E ENVIAR",
+
+  "noScoresYet": "Nenhuma pontuação ainda. Seja o primeiro!",
+  "failedToLoad": "Falha ao carregar o ranking",
+
+  "shieldActive": "ESCUDO",
+  "doubleScoreActive": "2X",
+  "slowMotionActive": "LENTO",
+
+  "score": "Pontuação",
+  "shield": "Escudo",
+  "slowMotion": "Câmera lenta",
+  "magnet": "Imã",
+  "doubleScore": "Pontuação dupla",
+  "watchAd": "Ver anúncio"
+}
