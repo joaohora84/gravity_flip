@@ -54,6 +54,35 @@ Target: Global, all ages
 
 ---
 
+## Commands
+
+    flutter pub get              # install dependencies
+    flutter analyze              # static analysis — must be clean before any change is done
+    flutter test                 # run all tests
+    flutter test test/foo_test.dart              # run a single test file
+    flutter test --plain-name "some test name"   # run a single test by name
+    flutter gen-l10n             # regenerate lib/l10n/app_localizations.dart after editing the .arb files
+    flutter devices              # list connected devices/emulators
+    flutter run -d <device-id>   # run on a device (see "Firebase is wired eagerly" below before picking web/macOS)
+
+## Architecture Notes
+
+Things that aren't obvious from the file layout and require reading multiple files to piece together:
+
+- **`GravityFlipGame` (`lib/game/gravity_flip_game.dart`) is the app's state machine.** It's a `FlameGame` holding a `GameState` enum (`menu | playing | waitingContinue | gameOver | leaderboard`) and swaps a single `_activeScene` component in and out (`MainMenu`, `GameplayScene`, `GameOverScene`, `LeaderboardScene`). All top-level transitions (`startNewGame`, `showMainMenu`, `showLeaderboard`, `onGameOver`, `_showGameOverScene`, `_continueGame`) live in this one file — start here to trace game flow. Input is routed centrally too: `onTapDown` switches on `gameState` and forwards to whichever scene is active.
+
+- **Freezing gameplay requires overriding `updateTree`, not `update`.** In Flame, `Component.update()` is not what propagates to children — `updateTree()` calls `update()` and then unconditionally walks children regardless of what `update()` did. `GameplayScene` freezes its whole subtree (obstacles, spawners, power-ups, score) on death/continue by overriding `updateTree()` and short-circuiting when `_frozen`. Any new child system added under `GameplayScene` is paused automatically for free — no extra wiring needed, as long as it's a descendant in that component tree.
+
+- **Two Flame asset caches, two different default prefixes.** `Images` defaults to `assets/images/`, so `GravityFlipGame.onLoad()` overrides it (`images.prefix = 'assets/sprites/'`) to match this project's folder. `flame_audio`'s `AudioCache` already defaults to `assets/audio/`, so `AudioSystem` needs no override. When loading a new sprite or sound, pass the bare filename only (`Sprite.load('foo.png')`, `AudioSystem.playSfx(...)`/`FlameAudio.play('foo.wav')`) — never the folder prefix.
+
+- **Firebase is wired eagerly, which blocks web/macOS runs and `flutter test`.** `GravityFlipGame` constructs `LeaderboardService` as a field initializer, and `LeaderboardService`'s own constructor touches `FirebaseAuth.instance` immediately — before `onLoad()`, before any platform check. There is no `firebase_options.dart` and no web Firebase config, so `flutter run -d chrome`, `flutter run -d macos`, and `flutter test` (including the default `test/widget_test.dart`) all currently crash on boot with `[core/no-app] No Firebase App '[DEFAULT]' has been created`. The app only runs end-to-end on Android/iOS, where `google-services.json` / `GoogleService-Info.plist` are present. To test a component in isolation, don't instantiate `GravityFlipGame` — drive the component directly against a bare `FlameGame` (and `Images`/`Sprite.load` for asset-loading checks), bypassing the game class and its Firebase-coupled fields entirely.
+
+- **`AdManager.adsEnabled` is hardcoded to `false`** (`lib/monetization/ad_manager.dart`), and both rewarded/interstitial ad unit IDs are Google's public test IDs. Flip that flag and swap in real AdMob unit IDs before any release build.
+
+- **Difficulty is driven by score milestones, not elapsed time.** `DifficultySystem` (`game/systems/difficulty_system.dart`) is a pure class with no Flame/game imports; `GameplayScene._handleObstaclePassed()` calls it on every obstacle pass. Crossing a milestone (`[10, 25, 50, 100, 200]`) bumps speed, shrinks the gap, and shortens the spawn interval, writing the results back into `GravityFlipGame.currentSpeed` / `currentGapSize` / `currentSpawnInterval` — those three fields are the single source of truth that `ObstacleSpawner` and `Obstacle` read from every frame.
+
+---
+
 ## Project Structure
 
   lib/
@@ -72,6 +101,7 @@ Target: Global, all ages
         power_up_spawner.dart
         score_system.dart
         difficulty_system.dart
+        audio_system.dart
       scenes/
         main_menu.dart
         gameplay_scene.dart
@@ -82,6 +112,8 @@ Target: Global, all ages
     leaderboard/
       leaderboard_service.dart
       leaderboard_screen.dart
+    analytics/
+      analytics_service.dart
     l10n/
       app_pt.arb
       app_en.arb
