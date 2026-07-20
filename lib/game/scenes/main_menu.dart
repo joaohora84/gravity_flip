@@ -12,6 +12,8 @@ class MainMenu extends Component with HasGameReference<GravityFlipGame> {
   double _blinkTimer = 0;
 
   late Rect _leaderboardRect;
+  Rect? _removeAdsRect;
+  Rect? _restoreRect;
 
   @override
   Future<void> onLoad() async {
@@ -100,6 +102,69 @@ class MainMenu extends Component with HasGameReference<GravityFlipGame> {
       anchor: Anchor.center,
       position: Vector2(cx, lbY),
     ));
+
+    // Remove ads / restore purchase
+    if (game.purchaseManager.adsRemoved) {
+      await add(TextComponent(
+        text: s?.adsRemoved ?? 'ADS REMOVED',
+        textRenderer: TextPaint(
+          style: const TextStyle(
+            color: Color(0xFF4CAF50),
+            fontSize: 12,
+            letterSpacing: 1.5,
+          ),
+        ),
+        anchor: Anchor.center,
+        position: Vector2(cx, h * 0.88),
+      ));
+    } else {
+      const raW = 190.0;
+      const raH = 40.0;
+      final raY = h * 0.87;
+      _removeAdsRect = Rect.fromCenter(
+        center: Offset(cx, raY),
+        width: raW,
+        height: raH,
+      );
+      await add(RectangleComponent(
+        position: Vector2(cx - raW / 2, raY - raH / 2),
+        size: Vector2(raW, raH),
+        paint: Paint()..color = const Color(0xFF1E1E3A),
+      ));
+      await add(TextComponent(
+        text: s?.removeAds ?? 'REMOVE ADS',
+        textRenderer: TextPaint(
+          style: const TextStyle(
+            color: Color(0xFF9E9E9E),
+            fontSize: 13,
+            letterSpacing: 2,
+          ),
+        ),
+        anchor: Anchor.center,
+        position: Vector2(cx, raY),
+      ));
+
+      final restoreY = h * 0.955;
+      const restoreW = 170.0;
+      const restoreH = 26.0;
+      _restoreRect = Rect.fromCenter(
+        center: Offset(cx, restoreY),
+        width: restoreW,
+        height: restoreH,
+      );
+      await add(TextComponent(
+        text: s?.restorePurchase ?? 'RESTORE PURCHASE',
+        textRenderer: TextPaint(
+          style: const TextStyle(
+            color: Color(0xFF555577),
+            fontSize: 10,
+            letterSpacing: 1.5,
+          ),
+        ),
+        anchor: Anchor.center,
+        position: Vector2(cx, restoreY),
+      ));
+    }
   }
 
   @override
@@ -110,8 +175,13 @@ class MainMenu extends Component with HasGameReference<GravityFlipGame> {
 
   void handleTap(Vector2 pos) {
     AudioSystem.playSfx(Sfx.buttonTap);
-    if (_leaderboardRect.contains(pos.toOffset())) {
+    final offset = pos.toOffset();
+    if (_leaderboardRect.contains(offset)) {
       game.showLeaderboard();
+    } else if (_removeAdsRect?.contains(offset) == true) {
+      game.buyRemoveAds();
+    } else if (_restoreRect?.contains(offset) == true) {
+      game.restorePurchases();
     } else {
       game.startNewGame();
     }

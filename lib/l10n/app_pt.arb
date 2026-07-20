@@ -6,6 +6,10 @@
   "leaderboard": "RANKING",
   "back": "VOLTAR",
 
+  "removeAds": "REMOVER ANÚNCIOS",
+  "adsRemoved": "ANÚNCIOS REMOVIDOS",
+  "restorePurchase": "RESTAURAR COMPRA",
+
   "gameOver": "FIM DE JOGO",
   "newBest": "NOVO RECORDE!",
   "bestLabel": "MELHOR",

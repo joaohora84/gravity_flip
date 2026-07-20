@@ -9,6 +9,7 @@ import '../analytics/analytics_service.dart';
 import '../leaderboard/leaderboard_screen.dart';
 import '../leaderboard/leaderboard_service.dart';
 import '../monetization/ad_manager.dart';
+import '../monetization/purchase_manager.dart';
 import 'components/background.dart';
 import 'components/ground.dart';
 import 'components/power_up.dart';
@@ -44,6 +45,7 @@ class GravityFlipGame extends FlameGame
   int pendingLeaderboardScore = 0;
 
   final adManager = AdManager();
+  final purchaseManager = PurchaseManager();
   final analyticsService = AnalyticsService();
 
   GameplayScene? _gameplayScene;
@@ -60,6 +62,10 @@ class GravityFlipGame extends FlameGame
     await AudioSystem.preload();
     await leaderboardService.initialize();
     await adManager.initialize();
+    purchaseManager.onAdsRemovedChanged =
+        (removed) => adManager.adsEnabled = !removed;
+    await purchaseManager.initialize();
+    adManager.adsEnabled = !purchaseManager.adsRemoved;
     await add(Background());
     await add(Ground());
     await _showMainMenu();
@@ -131,6 +137,10 @@ class GravityFlipGame extends FlameGame
     _showGameOverScene(score: score, best: best, isNewBest: isNew);
   }
 
+  Future<void> buyRemoveAds() => purchaseManager.buyRemoveAds();
+
+  Future<void> restorePurchases() => purchaseManager.restorePurchases();
+
   // ── Game logic ─────────────────────────────────────────────────────────────
 
   void applyPowerUp(PowerUpType type) {
@@ -186,6 +196,10 @@ class GravityFlipGame extends FlameGame
   void onGameOver() {
     if (gameState == GameState.waitingContinue ||
         gameState == GameState.gameOver) {
+      return;
+    }
+    if (!adManager.adsEnabled) {
+      declineContinue();
       return;
     }
     gameState = GameState.waitingContinue;

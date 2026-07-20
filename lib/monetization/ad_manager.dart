@@ -11,16 +11,16 @@ class AdManager {
   static const _minRunsForInterstitial = 3;
   static const _interstitialCooldown = Duration(minutes: 3);
 
-  // Set to true before publishing
-  static const adsEnabled = false;
+  bool adsEnabled = true;
 
-  // Google test IDs — replace with real AdMob IDs before publishing
+  // Android: production AdMob IDs. iOS: still Google test IDs — replace
+  // once the iOS app is registered in AdMob.
   static String get _rewardedAdUnitId => Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/5224354917'
+      ? 'ca-app-pub-8828492606855788/5812250366'
       : 'ca-app-pub-3940256099942544/1712485313';
 
   static String get _interstitialAdUnitId => Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/1033173712'
+      ? 'ca-app-pub-8828492606855788/5947981738'
       : 'ca-app-pub-3940256099942544/4411468910';
 
   Future<void> initialize() async {

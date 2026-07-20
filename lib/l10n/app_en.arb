@@ -6,6 +6,10 @@
   "leaderboard": "LEADERBOARD",
   "back": "BACK",
 
+  "removeAds": "REMOVE ADS",
+  "adsRemoved": "ADS REMOVED",
+  "restorePurchase": "RESTORE PURCHASE",
+
   "gameOver": "GAME OVER",
   "newBest": "NEW BEST!",
   "bestLabel": "BEST",
